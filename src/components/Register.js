@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext } from "../contexts/AuthProvider";
 
 const Register = () => {
+  const { createUser, updateDetails } = useContext(AuthContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log(name, email, password);
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        updateDetails(name)
+          .then(() => {
+            toast.success("Name Updated", { autoClose: 500 });
+            console.log(user);
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          });
+      })
+      .then((error) => {
+        console.error(error);
+      });
   };
   return (
     <div className="flex justify-center items-center pt-8">
