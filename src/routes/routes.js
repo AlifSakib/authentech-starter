@@ -7,6 +7,7 @@ import Register from "../components/Register";
 import Wallet from "../components/Wallet";
 
 import Main from "../layout/Main";
+import ProvateRoute from "./ProvateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -31,11 +32,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile></Profile>,
+        element: (
+          <ProvateRoute>
+            <Profile></Profile>
+          </ProvateRoute>
+        ),
       },
       {
         path: "/wallet",
-        element: <Wallet></Wallet>,
+        element: (
+          <ProvateRoute>
+            <Wallet></Wallet>
+          </ProvateRoute>
+        ),
       },
     ],
   },

@@ -1,22 +1,40 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthProvider";
 
 const Login = () => {
-  const { logInUser } = useContext(AuthContext);
+  const { logInUser, resetPassword } = useContext(AuthContext);
+  const [userEmail, setUserEmail] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  console.log(from);
   const handleLogin = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+    setUserEmail(email);
 
     logInUser(email, password)
       .then((result) => {
         const user = result.use;
         toast.success("Login Success");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.error(error);
+      });
+  };
+
+  const handleForgetPass = () => {
+    resetPassword(userEmail)
+      .then(() => {
+        toast("Reset Link Sent");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   return (
@@ -74,7 +92,10 @@ const Login = () => {
           </div>
         </form>
         <div className="space-y-1">
-          <button className="text-xs hover:underline text-gray-400">
+          <button
+            onClick={handleForgetPass}
+            className="text-xs hover:underline text-gray-400"
+          >
             Forgot password?
           </button>
         </div>
