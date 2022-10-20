@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../contexts/AuthProvider";
 
 const Register = () => {
-  const { createUser, updateDetails } = useContext(AuthContext);
+  const { createUser, updateDetails, verifyEmail } = useContext(AuthContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -18,6 +18,13 @@ const Register = () => {
           .then(() => {
             toast.success("Name Updated", { autoClose: 500 });
             console.log(user);
+            verifyEmail()
+              .then(() => {
+                toast.info("Varification Email Sent");
+              })
+              .catch((error) => {
+                toast.error(error.message);
+              });
           })
           .catch((error) => {
             toast.error(error.message);
